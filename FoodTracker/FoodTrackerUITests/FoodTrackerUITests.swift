@@ -18,4 +18,10 @@ class FoodTrackerUITests: XCUITestCase {
     func testDeleteMeal() {
         foodTracker.on(page: MainPage.self).deleteMeal(name: "Kung Pao Chicken").checkHasMeal(name: "Kung Pao Chicken", expected: false)
     }
+    
+    func testSetStars() {
+        foodTracker
+            .on(page: MainPage.self).openAdd()
+            .on(page: AddPage.self).addMeal(name: "Sticky dofu", stars: 3).checkHasMeal(name: "Sticky dofu", stars: 3)
+    }
 }

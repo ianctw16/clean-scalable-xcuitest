@@ -5,6 +5,7 @@ final class MainPage: Page {
     lazy var deleteButton = app.buttons["Delete"].firstMatch
     lazy var title = app.navigationBars["Your Meals"].firstMatch
     lazy var meals = app.tables.cells.staticTexts
+    lazy var table = app.tables.cells
 
     required init(_ app: XCUIApplication) {
         super.init(app)
@@ -13,15 +14,24 @@ final class MainPage: Page {
     }
     
     @discardableResult
-    func checkHasMeal(name: String, expected: Bool = true ) -> Self {
+    func checkHasMeal(name: String, expected: Bool = true,  stars: Int = 0) -> Self {
         let meal = meals[name].firstMatch
-
-        switch expected {
-        case true:
-            XCTAssertEqual(meal.label, name)
-        case false:
-            waitFor(element: meal, status: .notExist)
+        
+        if stars == 0{
+            switch expected {
+            case true:
+                XCTAssertEqual(meal.label, name)
+            case false:
+                waitFor(element: meal, status: .notExist)
+            }
         }
+        else{
+            let lastRowIndex = table.allElementsBoundByIndex.endIndex
+            let lastRow = table.allElementsBoundByIndex[lastRowIndex-1].buttons["Set " + String(stars) + " star rating"]
+            XCTAssertEqual(lastRow.value as! String, String(stars) + " stars set.")
+            XCTAssertEqual(meal.label, name)
+        }
+        
 
         return self
     }

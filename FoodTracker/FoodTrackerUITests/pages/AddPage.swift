@@ -11,9 +11,13 @@ final class AddPage: Page {
     }
     
     @discardableResult
-    func addMeal(name: String) -> MainPage {
+    func addMeal(name: String, stars: Int = 0) -> MainPage {
         tap(element: textField)
         typeText(element: textField, text: name + "\n")
+        if stars != 0{
+           let starButton = app.buttons["Set " + String(stars) + " star rating"].firstMatch
+            tap(element: starButton)
+        }
         tap(element: saveButton)
 
         return MainPage(app)
